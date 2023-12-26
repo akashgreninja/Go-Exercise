@@ -4,7 +4,7 @@
 4)Writing=>https://pkg.go.dev/os and for appending https://pkg.go.dev/os#pkg-overview ✔️
 5)Append to a file not replace it ✔️
 5) use regex to match the latency in the api endpoint (will become toocomplex using for) 
-
+6)Test all the cases from chatgpt geenrated testcases.txt ✔️
 
 
 Phase 2

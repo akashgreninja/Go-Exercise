@@ -1,0 +1,42 @@
+[
+  {
+  
+    "input": {
+      "ipaddress": "8.8.8.8",
+      "count": 5
+    }
+  },
+  {
+ 
+    "input": {
+      "ipaddress": "823323.8.8.8", 
+      "count": 5
+    }
+  },
+  {
+   
+    "input": {
+      "ipaddress": "999.999.999.999",
+      "count": 5
+    }
+  },
+  {
+   
+    "input": {
+      "ipaddress": "8.8.8.8",
+      "count": -5 
+    }
+  },
+  {
+    
+    "input": {
+      "count": 5 
+    }
+  },
+  {
+   
+    "input": {
+      "ipaddress": "8.8.8.8" 
+    }
+  }
+]
