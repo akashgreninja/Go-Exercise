@@ -7,6 +7,7 @@ import (
 	"log"
 	"main/models"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -17,6 +18,10 @@ func getDetailsofthePing(ipaddress string, count int) models.Response {
 	result := make(map[string]interface{})
 
 	// var check models.Response
+	// if net.ParseIP(ipaddress) == nil {
+	// 	fmt.Println("we here")
+	// 	return models.Response{Ipaddress: "IP address not valid, please check"}
+	// }
 
 	cmd := exec.Command("ping", "-c", strconv.Itoa(count), ipaddress)
 	var stdout bytes.Buffer
@@ -25,7 +30,7 @@ func getDetailsofthePing(ipaddress string, count int) models.Response {
 	cmd.Stderr = &stderr
 	done := cmd.Run()
 	if done != nil {
-		log.Fatalf("Failed to execute ping command: %s", done)
+		return models.Response{Ipaddress: "IP address not valid, please check"}
 	}
 	output := stdout.String()
 	lines := strings.Split(output, "\n")
@@ -105,13 +110,15 @@ func getDetailsofthePing(ipaddress string, count int) models.Response {
 				Mdev: mdevValue,
 			},
 		}
+
 		return response
 
 	} else {
-		log.Panic("error ")
+		log.Println("Type assertion failed or values are nil")
+		if packetLossValue == "" || !transmittedOK || !receivedOK || !latencyMapOK || minValue == "" || avgValue == "" || maxValue == "" || mdevValue == "" {
+			return models.Response{Ipaddress: "IP address not valid, please check"}
+		}
 	}
-	log.Println("Type assertion failed or values are nil")
-
 	return models.Response{}
 
 }
@@ -133,6 +140,16 @@ func Statistics(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(result.Ipaddress)
 	checkers := getDetailsofthePing(result.Ipaddress, result.Count)
+	//diff between io.Write string anf file.Write check
+	responseJSON, err := json.Marshal(checkers)
+	if err != nil {
+		log.Fatalf("Error marshaling response to JSON: %s", err)
+	}
+	filr, err := os.Create("successlog.txt")
+	if err != nil {
+		fmt.Println("errpr")
+	}
+	filr.Write(responseJSON)
 
 	json.NewEncoder(w).Encode(checkers)
 

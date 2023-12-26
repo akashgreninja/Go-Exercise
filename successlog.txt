@@ -1,0 +1,1 @@
+{"ipaddress":"8.8.8.8","count":5,"transmitted":5,"received":5,"packetloss":"0%","latency":{"Min":"9.924","Max":"11.796","Avg":"11.057","Mdev":"0.671 ms"}}
