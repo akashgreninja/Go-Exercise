@@ -2,19 +2,21 @@ package models
 
 type Request struct {
 	Ipaddress string `json:"ipaddress,omitempty"`
-	count     int    `json:"count,omitempty"`
+	Count     int    `json:"count,omitempty"`
 }
 
 type Response struct {
-	ipaddress   string   `json:"ipaddress,omitempty"`
-	count       int      `json:"count,omitempty"`
-	transmitted int      `json:"transmitted,omitempty"`
-	received    int      `json:"received,omitempty"`
-	Packetloss  int      `json:"packetloss,omitempty"`
-	latency     *latency `json:"latency,omitempty"`
+	Ipaddress   string   `json:"ipaddress,omitempty"`
+	Count       int      `json:"count,omitempty"`
+	Transmitted int      `json:"transmitted,omitempty"`
+	Received    int      `json:"received,omitempty"`
+	Packetloss  string   `json:"packetloss,omitempty"`
+	Latency     *Latency `json:"latency,omitempty"`
 }
 
-type latency struct {
-	min string
-	max string
+type Latency struct {
+	Min  string
+	Max  string
+	Avg  string
+	Mdev string
 }
