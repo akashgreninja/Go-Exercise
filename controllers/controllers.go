@@ -145,7 +145,8 @@ func Statistics(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("Error marshaling response to JSON: %s", err)
 	}
-	filr, err := os.Create("successlog.txt")
+
+	filr, err := os.OpenFile("successlog.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println("errpr")
 	}

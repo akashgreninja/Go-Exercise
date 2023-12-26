@@ -1,6 +1,14 @@
 1)setup Mutex and folder structure ✔️
 2)Your application must have a blueprint called mod_ip (read about flask blueprints)=> basic structure ✔️
 3)Ping in Golang =>https://stackoverflow.com/questions/31868639/how-to-ping-an-ip-address-in-golang ✔️
-4)Writing=>https://pkg.go.dev/os
-5)Append to a file not replace it 
-5) use regex to match the latency in the api endpoint (will become toocomplex using for)
+4)Writing=>https://pkg.go.dev/os and for appending https://pkg.go.dev/os#pkg-overview ✔️
+5)Append to a file not replace it ✔️
+5) use regex to match the latency in the api endpoint (will become toocomplex using for) 
+
+
+
+Phase 2
+1)Test i with all test cases 
+
+Phase 3
+3)Create a db to add all this 
