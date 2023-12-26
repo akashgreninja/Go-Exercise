@@ -1,1 +1,1 @@
-{"ipaddress":"8.8.8.8","count":5,"transmitted":5,"received":5,"packetloss":"0%","latency":{"Min":"11.647","Max":"68.678","Avg":"33.366","Mdev":"20.645 ms"}}
+{"ipaddress":"8.8.8.8","count":5,"transmitted":5,"received":5,"packetloss":"0%","latency":{"Min":"11.647","Max":"68.678","Avg":"33.366","Mdev":"20.645 ms"}}{"ipaddress":"IP address not valid, please check"}

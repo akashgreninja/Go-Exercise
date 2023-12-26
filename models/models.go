@@ -20,3 +20,7 @@ type Latency struct {
 	Avg  string
 	Mdev string
 }
+type Errorlog struct {
+	Ipaddress string
+	Count     int
+}
