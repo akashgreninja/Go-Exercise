@@ -55,10 +55,15 @@ type Job struct {
 	EndTime   time.Time `json:"end_time"`
 	Created   time.Time
 	Modified  time.Time
+	Data      *Response
 }
 
 type Result struct {
 	Data    []*Job
 	Error   string
 	Success bool
+}
+
+type HandleTestIPResponse struct {
+	JobId int `json:"job-id"`
 }

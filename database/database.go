@@ -18,8 +18,9 @@ func init() {
 	// dbName := "your_database"
 	// dbHost := "localhost"
 	// dbPort := 3306 //
+	var err error
+	db, err = sql.Open("postgres", "postgres://postgres:12345@127.0.0.1:5432/jobs?sslmode=disable")
 
-	db, err := sql.Open("postgres", "user:password@tcp(127.0.0.1:5432)/testdb")
 	if err != nil {
 		panic(err)
 	}
@@ -27,6 +28,6 @@ func init() {
 
 }
 
-func main() {
-	defer db.Close()
+func GetDB() *sql.DB {
+	return db
 }

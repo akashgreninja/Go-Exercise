@@ -12,15 +12,16 @@ Phase 2
 1)  Test all the cases from chatgpt geenrated testcases.txt ✔️ 
 
 Phase 3
-3)Create models for jobs 
-4)do_get_jobs: will be called by API 3a to get all the jobs.
-do_get_job(jobId): will be called by API 3b. To get specific job.
-Define do_create_job(data={}) that will be used by API 3c.
+3)Create models for jobs ✔️ 
+4)do_get_jobs: will be called by API 3a to get all the jobs.✔️ 
+do_get_job(jobId): will be called by API 3b. To get specific job.✔️ 
+Define do_create_job(data={}) that will be used by API 3c.✔️ 
 
-5) setup a orm or base sql => database/sql package setup
+5) setup a orm or base sql => database/sql package setup✔️ 
 
 
 
 Phase 4
-6)i think should happen is when we send the job to db
-next the user queries the id and as soon as he sends it to the celeb worker he it must update to job running and calculations must be performed at the end of this it mus show job  has been done and data must be stored back in the db
+6))Create a job and add it to db and at the same time ✔️
+2)Get the ip details async using goroutines and waitgroups✔️
+3)add this back to the jobs in the database then show the status to the user whenever he wants correct ?✔️
