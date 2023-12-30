@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	_ "main/database"
 	"main/router"
 	"net/http"
 )
