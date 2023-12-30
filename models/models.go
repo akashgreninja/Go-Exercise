@@ -1,5 +1,8 @@
 package models
 
+import "time"
+
+// ip models
 type Request struct {
 	Ipaddress string `json:"ipaddress,omitempty"`
 	Count     int    `json:"count,omitempty"`
@@ -23,4 +26,31 @@ type Latency struct {
 type Errorlog struct {
 	Ipaddress string
 	Count     int
+}
+
+//JOBS MODELS
+
+type JobState string
+
+const (
+	JOB_STATE_CREATED   JobState = "JOB_STATE_CREATED"
+	JOB_STATE_SCHEDULED JobState = "JOB_STATE_SCHEDULED"
+	JOB_STATE_RUNNING   JobState = "JOB_STATE_RUNNING"
+	JOB_STATE_SUCCESS   JobState = "JOB_STATE_SUCCESS"
+	JOB_STATE_FAILED    JobState = "JOB_STATE_FAILED"
+)
+
+type JobType string
+
+const (
+	JOB_TYPE_IP_MEASUREMENT JobType = "JOB_TYPE_IP_MEASUREMENT"
+)
+
+type Job struct {
+	ID        int       `json:"id"`
+	Name      string    `json:"name"`
+	State     JobState  `json:"state"`
+	JobType   JobType   `json:"job_type"`
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
 }
