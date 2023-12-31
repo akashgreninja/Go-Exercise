@@ -231,9 +231,9 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 		check.Name = result.Ipaddress
 		beaters = final_ip_job(check)
 		fmt.Println(beaters.ID)
-		fmt.Println("Sending to newIdChanChan")
+
 		newIDChan <- beaters.ID
-		fmt.Println("Sent to newIdChanChan")
+
 		var res models.HandleTestIPResponse
 		res.JobId = beaters.ID
 		json.NewEncoder(w).Encode(res)
@@ -242,12 +242,12 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		defer wg.Done()
-		fmt.Println("Receiving from newIDChan")
-		newID := <-newIDChan // Receive the new ID from the channel
+
+		newID := <-newIDChan
 		fmt.Printf("we are printint newId %d", newID)
 		checkers := <-checkersChan
 		fmt.Println(checkers)
-		fmt.Println("Receiving from newIDChan")
+
 		jsonData, err := json.Marshal(checkers)
 		if err != nil {
 			errorChan <- err
