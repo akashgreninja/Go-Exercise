@@ -131,6 +131,7 @@ func do_create_job(check models.Job) models.Job {
 
 	err = db.QueryRow(query, check.Created, check.EndTime, check.JobType, check.Modified, check.Name, check.StartTime, check.State).Scan(&newID)
 	if err != nil {
+		fmt.Println(err)
 		return models.Job{}
 	}
 	if newID != 0 {
@@ -229,6 +230,7 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 		var check models.Job
 		check.Name = result.Ipaddress
 		beaters = final_ip_job(check)
+		fmt.Println(beaters.ID)
 		fmt.Println("Sending to newIdChanChan")
 		newIDChan <- beaters.ID
 		fmt.Println("Sent to newIdChanChan")
@@ -242,7 +244,9 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 		defer wg.Done()
 		fmt.Println("Receiving from newIDChan")
 		newID := <-newIDChan // Receive the new ID from the channel
+		fmt.Printf("we are printint newId %d", newID)
 		checkers := <-checkersChan
+		fmt.Println(checkers)
 		fmt.Println("Receiving from newIDChan")
 		jsonData, err := json.Marshal(checkers)
 		if err != nil {
@@ -265,9 +269,15 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 		return
 	}
-	var res models.HandleTestIPResponse
-	res.JobId = <-newIDChan
-	json.NewEncoder(w).Encode(res)
+	fmt.Println("we are here really")
+	// chech, _ := json.Marshal(newIDChan)
+	// json.NewEncoder(w).Encode(chech)
+	// var res models.HandleTestIPResponse
+	// res.JobId = <-newIDChan
+	// fmt.Println(res)
+	// fmt.Println("the top one")
+	// json.NewEncoder(w).Encode(res)
+	// return
 
 }
 
@@ -303,6 +313,8 @@ func final_ip_job(check models.Job) models.Job {
 			log.Panic(err)
 			fmt.Println("we here")
 		}
+		fmt.Println("from the final_ip")
+		fmt.Println(check)
 		return check
 
 	}
