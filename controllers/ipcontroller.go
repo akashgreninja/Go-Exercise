@@ -40,6 +40,7 @@ func getDetailsofthePing(ipaddress string, count int) models.Response {
 			log.Fatalf("Error marshaling response to JSON: %s", err)
 		}
 
+		//Appends to failog.txt if it fails
 		filr, err := os.OpenFile("faillog.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			fmt.Println("errpr")

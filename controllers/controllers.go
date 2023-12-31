@@ -8,6 +8,7 @@ import (
 	"main/database"
 	"main/models"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -94,25 +95,46 @@ func getOneJob(id string) models.Job {
 
 }
 
-func GetAllJobs(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/x-www-form-urlencode")
-	w.Header().Set("Allow-Control-Allow-Methods", "POST")
-	fmt.Println("we here")
+func final_ip_job(check models.Job) models.Job {
+	check.Created = time.Now()
+	check.JobType = models.JOB_TYPE_IP_MEASUREMENT
+	check.State = models.JOB_STATE_CREATED
 
-	if wadu == nil {
+	wadu = append(wadu, check)
+	query := `
+	INSERT INTO jobs (Created, EndTime, JobType, Modified, Name, StartTime, State)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
+	ON CONFLICT (Name) DO NOTHING
+	RETURNING id
+`
+	var (
+		newID int
+		err   error
+	)
 
-		check := models.Result{
-			Data:    []*models.Job{},
-			Error:   "",
-			Success: true,
-		}
-		json.NewEncoder(w).Encode(check)
-		return
+	err = db.QueryRow(query, check.Created, check.EndTime, check.JobType, check.Modified, check.Name, check.StartTime, check.State).Scan(&newID)
+	if err != nil {
+		fmt.Println("we here")
+		return models.Job{}
 	}
-	json.NewEncoder(w).Encode(wadu)
+	if newID != 0 {
+		check.ID = newID
+		fmt.Println(newID)
+		wadu = append(wadu, check)
+
+		_, err = db.Exec("UPDATE jobs SET State=$1 WHERE ID=$2", models.JOB_STATE_SUCCESS, check.ID)
+		if err != nil {
+			log.Panic(err)
+			fmt.Println("we here")
+		}
+		fmt.Println("from the final_ip")
+		fmt.Println(check)
+		return check
+
+	}
+	return models.Job{}
 
 }
-
 func do_create_job(check models.Job) models.Job {
 	check.Created = time.Now()
 	check.JobType = models.JOB_TYPE_IP_MEASUREMENT
@@ -144,6 +166,27 @@ func do_create_job(check models.Job) models.Job {
 	return models.Job{}
 
 }
+
+// all api hits
+func GetAllJobs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/x-www-form-urlencode")
+	w.Header().Set("Allow-Control-Allow-Methods", "POST")
+	fmt.Println("we here")
+
+	if wadu == nil {
+
+		check := models.Result{
+			Data:    []*models.Job{},
+			Error:   "",
+			Success: true,
+		}
+		json.NewEncoder(w).Encode(check)
+		return
+	}
+	json.NewEncoder(w).Encode(wadu)
+
+}
+
 func Do_create_job(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/x-www-form-urlencode")
 	w.Header().Set("Allow-Control-Allow-Methods", "POST")
@@ -217,6 +260,16 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 		defer wg.Done()
 
 		checkers = getDetailsofthePing(result.Ipaddress, result.Count)
+		responseJSON, err := json.Marshal(checkers)
+		if err != nil {
+			log.Fatalf("Error marshaling response to JSON: %s", err)
+		}
+
+		filr, err := os.OpenFile("successlog.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Println("errpr")
+		}
+		filr.Write(responseJSON)
 		fmt.Println("Sending to checkersChan")
 		checkersChan <- checkers
 		fmt.Println("Sent to checkersChan")
@@ -278,46 +331,5 @@ func Handle_test_ip(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println("the top one")
 	// json.NewEncoder(w).Encode(res)
 	// return
-
-}
-
-func final_ip_job(check models.Job) models.Job {
-	check.Created = time.Now()
-	check.JobType = models.JOB_TYPE_IP_MEASUREMENT
-	check.State = models.JOB_STATE_CREATED
-
-	wadu = append(wadu, check)
-	query := `
-	INSERT INTO jobs (Created, EndTime, JobType, Modified, Name, StartTime, State)
-	VALUES ($1, $2, $3, $4, $5, $6, $7)
-	ON CONFLICT (Name) DO NOTHING
-	RETURNING id
-`
-	var (
-		newID int
-		err   error
-	)
-
-	err = db.QueryRow(query, check.Created, check.EndTime, check.JobType, check.Modified, check.Name, check.StartTime, check.State).Scan(&newID)
-	if err != nil {
-		fmt.Println("we here")
-		return models.Job{}
-	}
-	if newID != 0 {
-		check.ID = newID
-		fmt.Println(newID)
-		wadu = append(wadu, check)
-
-		_, err = db.Exec("UPDATE jobs SET State=$1 WHERE ID=$2", models.JOB_STATE_SUCCESS, check.ID)
-		if err != nil {
-			log.Panic(err)
-			fmt.Println("we here")
-		}
-		fmt.Println("from the final_ip")
-		fmt.Println(check)
-		return check
-
-	}
-	return models.Job{}
 
 }
