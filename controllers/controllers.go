@@ -27,7 +27,7 @@ func init() {
 	startTime, _ := time.Parse(layout, "2021-11-24T09:07")
 	endTime, _ := time.Parse(layout, "2021-11-24T09:19")
 	modified, _ := time.Parse(layout, "2021-11-24T09:38")
-
+	//was made for phase 2 no longer used
 	checkers := []models.Job{
 		{
 			Created:   startTime,
@@ -98,7 +98,7 @@ func getOneJob(id string) models.Job {
 func final_ip_job(check models.Job) models.Job {
 	check.Created = time.Now()
 	check.JobType = models.JOB_TYPE_IP_MEASUREMENT
-	check.State = models.JOB_STATE_CREATED
+	check.State = models.JOB_STATE_RUNNING
 
 	wadu = append(wadu, check)
 	query := `
@@ -122,7 +122,7 @@ func final_ip_job(check models.Job) models.Job {
 		fmt.Println(newID)
 		wadu = append(wadu, check)
 
-		_, err = db.Exec("UPDATE jobs SET State=$1 WHERE ID=$2", models.JOB_STATE_SUCCESS, check.ID)
+		_, err = db.Exec("UPDATE jobs SET State=$1 WHERE ID=$2", models.JOB_STATE_RUNNING, check.ID)
 		if err != nil {
 			log.Panic(err)
 			fmt.Println("we here")
